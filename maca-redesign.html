@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MACA — Building Tanzania's Future</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ed;
+    --gold: #c9a84c;
+    --gold-light: #e8c97b;
+    --deep: #1a1610;
+    --mid: #2e2820;
+    --text-muted: #8a8070;
+    --border: rgba(201,168,76,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 60px;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    transition: background 0.3s;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 700; letter-spacing: 6px;
+    color: var(--gold); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(245,242,237,0.7); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 10px 28px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none; transition: all 0.3s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+  /* ─── HERO ────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    position: relative; overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 60px 100px;
+    position: relative; z-index: 2;
+  }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 32px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 40px; height: 1px; background: var(--gold);
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(60px, 7vw, 100px);
+    font-weight: 300; line-height: 0.95;
+    letter-spacing: -2px;
+    margin-bottom: 40px;
+  }
+  h1 em { font-style: italic; color: var(--gold); }
+  .hero-desc {
+    font-size: 15px; line-height: 1.8; color: rgba(245,242,237,0.6);
+    max-width: 380px; margin-bottom: 56px; font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 20px; align-items: center; }
+  .btn-primary {
+    background: var(--gold); color: var(--black);
+    padding: 16px 40px; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+    text-decoration: none; font-weight: 600; transition: all 0.3s;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-ghost {
+    color: var(--white); font-size: 12px; letter-spacing: 1px; text-decoration: none;
+    display: flex; align-items: center; gap: 10px; opacity: 0.7; transition: opacity 0.3s;
+  }
+  .btn-ghost:hover { opacity: 1; }
+  .btn-ghost::after { content: '→'; }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      linear-gradient(135deg, transparent 40%, rgba(201,168,76,0.04) 100%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-image-stack {
+    position: absolute; inset: 0;
+    display: flex; align-items: stretch;
+  }
+  .hero-img-panel {
+    flex: 1; background: var(--deep);
+    position: relative; overflow: hidden;
+  }
+  .hero-img-panel::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--black), transparent 30%),
+                linear-gradient(to top, rgba(10,10,10,0.5), transparent 50%);
+  }
+  .hero-visual {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #1a1610 0%, #2e2410 50%, #0a0a0a 100%);
+    position: relative; overflow: hidden;
+  }
+  /* Decorative abstract shape */
+  .hero-visual::before {
+    content: '';
+    position: absolute; bottom: -10%; right: -15%;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+  }
+  .hero-visual::after {
+    content: '';
+    position: absolute; top: 20%; left: 10%;
+    width: 1px; height: 300px; background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    animation: pulse-line 3s ease-in-out infinite;
+  }
+  @keyframes pulse-line {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+    50% { opacity: 0.8; transform: scaleY(1); }
+  }
+  /* Tanzania outline placeholder */
+  .hero-badge {
+    position: absolute; bottom: 80px; right: 60px;
+    border: 1px solid var(--border);
+    padding: 24px 32px;
+    background: rgba(10,10,10,0.8); backdrop-filter: blur(10px);
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .hero-badge-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300; color: var(--gold); line-height: 1;
+  }
+  .hero-badge-label {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text-muted); margin-top: 6px;
+  }
+
+  .hero-scrollbar {
+    position: absolute; left: 60px; bottom: 40px; z-index: 3;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+  }
+  .hero-scrollbar::before {
+    content: ''; width: 30px; height: 1px; background: var(--text-muted);
+    animation: scroll-line 2s ease-in-out infinite;
+  }
+  @keyframes scroll-line {
+    0% { width: 10px; } 50% { width: 40px; } 100% { width: 10px; }
+  }
+
+  /* ─── TICKER ──────────────────────────── */
+  .ticker {
+    background: var(--gold); color: var(--black);
+    overflow: hidden; white-space: nowrap; padding: 14px 0;
+  }
+  .ticker-inner {
+    display: inline-flex; gap: 0;
+    animation: ticker 20s linear infinite;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    font-weight: 600; padding: 0 40px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .ticker-item::after { content: '✦'; opacity: 0.5; }
+
+  /* ─── STATS ───────────────────────────── */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat {
+    padding: 60px 50px;
+    border-right: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: background 0.4s;
+  }
+  .stat:last-child { border-right: none; }
+  .stat:hover { background: rgba(201,168,76,0.04); }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px; font-weight: 300; color: var(--gold);
+    line-height: 1; margin-bottom: 12px;
+  }
+  .stat-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ─── SECTION HEADER ─────────────────── */
+  .section { padding: 120px 60px; }
+  .section-tag {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5vw, 72px);
+    font-weight: 300; line-height: 1.05; letter-spacing: -1px;
+  }
+  h2 em { font-style: italic; color: var(--gold); }
+
+  /* ─── ABOUT ───────────────────────────── */
+  .about { background: var(--deep); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 100px;
+    align-items: center;
+  }
+  .about-text { }
+  .about-text h2 { margin-bottom: 36px; }
+  .about-text p {
+    font-size: 15px; line-height: 1.9; color: rgba(245,242,237,0.6);
+    font-weight: 300; margin-bottom: 24px;
+  }
+  .about-visual {
+    position: relative; height: 500px;
+  }
+  .about-box {
+    position: absolute;
+    background: var(--mid);
+    border: 1px solid var(--border);
+  }
+  .about-box-main {
+    width: 75%; height: 75%; top: 0; right: 0;
+    background: linear-gradient(135deg, var(--mid), #1a1410);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px; font-weight: 300; color: rgba(201,168,76,0.15);
+    letter-spacing: 8px;
+  }
+  .about-box-accent {
+    width: 45%; height: 45%; bottom: 0; left: 0;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 4px;
+  }
+  .about-box-accent .n {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 600; color: var(--black); line-height: 1;
+  }
+  .about-box-accent .l {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(10,10,10,0.6); font-weight: 600;
+  }
+  .about-box-strip {
+    position: absolute; top: 80%; left: 55%; right: -5%;
+    height: 2px; background: var(--gold); opacity: 0.3;
+  }
+
+  /* ─── SECTORS ─────────────────────────── */
+  .sectors { background: var(--black); }
+  .sectors-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 80px;
+  }
+  .sectors-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  }
+  .sector-card {
+    background: var(--deep); padding: 48px 40px;
+    border: 1px solid transparent;
+    position: relative; overflow: hidden;
+    transition: all 0.4s; cursor: default;
+    min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .sector-card::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .sector-card:hover {
+    background: var(--mid); border-color: var(--border);
+  }
+  .sector-card:hover::before { transform: scaleX(1); }
+  .sector-icon {
+    font-size: 32px; margin-bottom: 24px;
+    width: 60px; height: 60px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.3s;
+  }
+  .sector-card:hover .sector-icon { border-color: var(--gold); }
+  .sector-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 400; margin-bottom: 12px;
+  }
+  .sector-desc {
+    font-size: 13px; line-height: 1.7; color: var(--text-muted); font-weight: 300;
+  }
+  .sector-arrow {
+    margin-top: 32px; color: var(--gold); font-size: 18px;
+    opacity: 0; transform: translateX(-10px);
+    transition: all 0.3s;
+  }
+  .sector-card:hover .sector-arrow { opacity: 1; transform: translateX(0); }
+
+  /* ─── PHILOSOPHY ─────────────────────── */
+  .philosophy {
+    background: var(--gold); color: var(--black);
+    padding: 120px 60px;
+    display: grid; grid-template-columns: 1fr 2fr; gap: 100px; align-items: center;
+  }
+  .philosophy-left .section-tag { color: rgba(10,10,10,0.5); }
+  .philosophy-left .section-tag::before { background: var(--black); }
+  .philosophy-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 300; line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+  .philosophy-attr {
+    margin-top: 40px; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(10,10,10,0.5); display: flex; align-items: center; gap: 16px;
+  }
+  .philosophy-attr::before { content: ''; width: 30px; height: 1px; background: var(--black); opacity: 0.4; }
+
+  /* ─── VALUES ─────────────────────────── */
+  .values { background: var(--deep); }
+  .values-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    margin-top: 80px;
+  }
+  .value-item {
+    padding: 48px 36px;
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+    transition: background 0.3s;
+  }
+  .value-item:hover { background: rgba(201,168,76,0.03); }
+  .value-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; color: rgba(201,168,76,0.2); font-weight: 300;
+    margin-bottom: 20px; line-height: 1;
+  }
+  .value-title {
+    font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px; font-weight: 500;
+  }
+  .value-desc {
+    font-size: 13px; line-height: 1.8; color: var(--text-muted); font-weight: 300;
+  }
+
+  /* ─── LEADERSHIP ─────────────────────── */
+  .leadership { background: var(--black); }
+  .leadership-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+    margin-top: 80px;
+  }
+  .leader-card { position: relative; }
+  .leader-photo {
+    width: 100%; aspect-ratio: 3/4; background: var(--deep);
+    position: relative; overflow: hidden; margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .leader-photo::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+    background: linear-gradient(to top, var(--black), transparent);
+  }
+  .leader-initials {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px; font-weight: 300; color: rgba(201,168,76,0.2);
+    letter-spacing: 8px;
+  }
+  .leader-accent {
+    position: absolute; bottom: 20px; left: 20px;
+    width: 40px; height: 3px; background: var(--gold); z-index: 2;
+  }
+  .leader-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; font-weight: 400; margin-bottom: 6px;
+  }
+  .leader-title {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+  }
+
+  /* ─── NEWS ────────────────────────────── */
+  .news { background: var(--deep); }
+  .news-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2px;
+    margin-top: 80px;
+  }
+  .news-item {
+    background: var(--black); padding: 40px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s; cursor: default;
+  }
+  .news-item:hover { border-color: var(--gold); }
+  .news-date {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .news-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 400; line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  .news-item-large .news-title { font-size: 32px; }
+  .news-excerpt {
+    font-size: 13px; line-height: 1.7; color: var(--text-muted);
+    font-weight: 300;
+  }
+  .news-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 24px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    transition: gap 0.3s;
+  }
+  .news-link:hover { gap: 14px; }
+
+  /* ─── CTA SECTION ────────────────────── */
+  .cta-section {
+    padding: 160px 60px; background: var(--black);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 { margin-bottom: 24px; }
+  .cta-section p {
+    font-size: 15px; color: var(--text-muted); max-width: 500px;
+    margin: 0 auto 56px; font-weight: 300; line-height: 1.8;
+  }
+  .cta-btns { display: flex; gap: 20px; justify-content: center; }
+
+  /* ─── FOOTER ──────────────────────────── */
+  footer {
+    background: var(--deep);
+    border-top: 1px solid var(--border);
+    padding: 80px 60px 40px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px;
+    margin-bottom: 80px;
+  }
+  .footer-brand .logo { display: block; margin-bottom: 20px; font-size: 24px; }
+  .footer-tagline {
+    font-size: 13px; color: var(--text-muted); line-height: 1.7;
+    max-width: 260px; font-weight: 300;
+  }
+  .footer-heading {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links a {
+    font-size: 13px; color: var(--text-muted); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom {
+    border-top: 1px solid var(--border); padding-top: 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: 12px; color: var(--text-muted); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a {
+    font-size: 12px; color: var(--text-muted); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-legal a:hover { color: var(--white); }
+
+  /* ─── ANIMATIONS ─────────────────────── */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── FLOATING WHATSAPP ──────────────── */
+  .wa-bubble {
+    position: fixed; bottom: 32px; right: 32px; z-index: 999;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+  }
+  .wa-tooltip {
+    background: var(--deep); border: 1px solid var(--border);
+    padding: 10px 18px; font-size: 12px; letter-spacing: 0.5px; color: var(--white);
+    white-space: nowrap; border-radius: 2px;
+    opacity: 0; transform: translateX(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .wa-bubble:hover .wa-tooltip { opacity: 1; transform: translateX(0); }
+  .wa-btn {
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25D366; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; text-decoration: none;
+    box-shadow: 0 4px 24px rgba(37,211,102,0.35);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+  .wa-btn:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.5); }
+  .wa-btn svg { width: 28px; height: 28px; fill: white; }
+  .wa-ping {
+    position: absolute; top: 2px; right: 2px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--gold); border: 2px solid var(--black);
+    animation: ping 2s ease-in-out infinite;
+  }
+  @keyframes ping {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.7; }
+  }
+
+  /* ─── CONTACT MODAL ──────────────────── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(5,4,3,0.85); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--deep); border: 1px solid var(--border);
+    width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto;
+    position: relative;
+    transform: translateY(30px) scale(0.97);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+  .modal-header {
+    padding: 48px 52px 36px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .modal-eyebrow {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .modal-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px; font-weight: 300; letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .modal-title em { font-style: italic; color: var(--gold); }
+  .modal-close {
+    position: absolute; top: 28px; right: 28px;
+    width: 40px; height: 40px; border: 1px solid var(--border);
+    background: none; color: var(--white); cursor: pointer;
+    font-size: 18px; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+
+  .modal-body { padding: 40px 52px 52px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .form-row.full { grid-template-columns: 1fr; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-label {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+    font-weight: 500;
+  }
+  .form-input, .form-select, .form-textarea {
+    background: var(--mid); border: 1px solid rgba(201,168,76,0.15);
+    color: var(--white); padding: 14px 18px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300;
+    outline: none; transition: border-color 0.3s;
+    width: 100%;
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-select { appearance: none; cursor: pointer; }
+  .form-select option { background: var(--deep); }
+  .form-textarea { resize: vertical; min-height: 120px; }
+
+  .form-divider {
+    border: none; border-top: 1px solid var(--border); margin: 28px 0;
+  }
+
+  .form-footer {
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  }
+  .form-note { font-size: 12px; color: var(--text-muted); max-width: 280px; line-height: 1.6; }
+
+  .btn-submit {
+    background: var(--gold); color: var(--black); border: none;
+    padding: 16px 44px; font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s; white-space: nowrap;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .btn-submit:hover { background: var(--gold-light); }
+  .btn-submit.loading { opacity: 0.7; pointer-events: none; }
+  .btn-submit .spinner {
+    width: 14px; height: 14px; border: 2px solid rgba(10,10,10,0.3);
+    border-top-color: var(--black); border-radius: 50%;
+    animation: spin 0.8s linear infinite; display: none;
+  }
+  .btn-submit.loading .spinner { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .form-success {
+    display: none; text-align: center; padding: 40px 20px;
+  }
+  .form-success.show { display: block; }
+  .form-success-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(201,168,76,0.1); border: 1px solid var(--gold);
+    margin: 0 auto 24px; display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .form-success h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; margin-bottom: 12px;
+  }
+  .form-success p { font-size: 14px; color: var(--text-muted); }
+
+  /* WA Chat Popup */
+  .wa-chat-popup {
+    position: fixed; bottom: 104px; right: 32px; z-index: 998;
+    width: 320px; background: var(--deep); border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    transform: translateY(20px) scale(0.95); opacity: 0; pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .wa-chat-popup.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
+  .wa-chat-header {
+    background: #075E54; padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .wa-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: #25D366; display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: white;
+    flex-shrink: 0;
+  }
+  .wa-header-info { flex: 1; }
+  .wa-header-name { font-size: 14px; font-weight: 600; color: white; line-height: 1.2; }
+  .wa-header-status { font-size: 11px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 5px; }
+  .wa-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #25D366; display: inline-block; }
+  .wa-close-popup {
+    background: none; border: none; color: rgba(255,255,255,0.7);
+    cursor: pointer; font-size: 16px; padding: 4px;
+    transition: color 0.2s;
+  }
+  .wa-close-popup:hover { color: white; }
+  .wa-chat-body { padding: 20px; }
+  .wa-bubble-msg {
+    background: var(--mid); border-radius: 0 8px 8px 8px;
+    padding: 12px 16px; font-size: 13px; line-height: 1.6; color: var(--white);
+    margin-bottom: 16px; position: relative;
+  }
+  .wa-bubble-msg::before {
+    content: ''; position: absolute; top: 0; left: -8px;
+    border: 8px solid transparent; border-top-color: var(--mid); border-left: none;
+  }
+  .wa-msg-time { font-size: 10px; color: var(--text-muted); text-align: right; margin-top: 4px; }
+  .wa-input-row {
+    display: flex; gap: 8px; align-items: center; margin-top: 12px;
+  }
+  .wa-input {
+    flex: 1; background: var(--mid); border: 1px solid rgba(201,168,76,0.15);
+    padding: 10px 14px; font-size: 13px; color: var(--white);
+    font-family: 'DM Sans', sans-serif; outline: none;
+    border-radius: 20px; transition: border-color 0.3s;
+  }
+  .wa-input::placeholder { color: var(--text-muted); }
+  .wa-input:focus { border-color: #25D366; }
+  .wa-send {
+    width: 40px; height: 40px; border-radius: 50%; background: #25D366;
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.2s;
+  }
+  .wa-send:hover { background: #128C7E; }
+  .wa-send svg { width: 18px; height: 18px; fill: white; }
+  .wa-disclaimer {
+    font-size: 10px; color: var(--text-muted); text-align: center;
+    padding: 8px 20px 16px; letter-spacing: 0.3px;
+  }
+
+  /* ─── RESPONSIVE ─────────────────────── */
+  @media (max-width: 1024px) {
+    nav { padding: 24px 30px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 140px 30px 80px; }
+    .about-grid, .sectors-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .values-grid { grid-template-columns: 1fr 1fr; }
+    .leadership-grid { grid-template-columns: 1fr 1fr; }
+    .news-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .section { padding: 80px 30px; }
+    .philosophy { padding: 80px 30px; grid-template-columns: 1fr; gap: 40px; }
+    .cta-section { padding: 100px 30px; }
+    footer { padding: 60px 30px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">MACA</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#sectors">Sectors</a></li>
+    <li><a href="#leadership">Leadership</a></li>
+    <li><a href="#news">News</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contact Us</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Est. Tanzania — Since 1965</p>
+    <h1>Building<br><em>Africa's</em><br>Tomorrow</h1>
+    <p class="hero-desc">MACA is a diversified investment and development company rooted in Tanzania, driving sustainable growth across key sectors of the African economy.</p>
+    <div class="hero-actions">
+      <a href="#sectors" class="btn-primary">Explore Our Portfolio</a>
+      <a href="#about" class="btn-ghost">Our Story</a>
+    </div>
+    <div class="hero-scrollbar">Scroll to explore</div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-badge">
+        <div class="hero-badge-num">58+</div>
+        <div class="hero-badge-label">Years of Excellence</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Manufacturing</span>
+    <span class="ticker-item">Real Estate</span>
+    <span class="ticker-item">Agriculture</span>
+    <span class="ticker-item">Logistics</span>
+    <span class="ticker-item">Energy</span>
+    <span class="ticker-item">Financial Services</span>
+    <span class="ticker-item">Technology</span>
+    <span class="ticker-item">Infrastructure</span>
+    <span class="ticker-item">Manufacturing</span>
+    <span class="ticker-item">Real Estate</span>
+    <span class="ticker-item">Agriculture</span>
+    <span class="ticker-item">Logistics</span>
+    <span class="ticker-item">Energy</span>
+    <span class="ticker-item">Financial Services</span>
+    <span class="ticker-item">Technology</span>
+    <span class="ticker-item">Infrastructure</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat reveal">
+    <div class="stat-num">12+</div>
+    <div class="stat-label">Business Sectors</div>
+  </div>
+  <div class="stat reveal" style="transition-delay:0.1s">
+    <div class="stat-num">TZS 2B+</div>
+    <div class="stat-label">Assets Under Management</div>
+  </div>
+  <div class="stat reveal" style="transition-delay:0.2s">
+    <div class="stat-num">3,500+</div>
+    <div class="stat-label">Employees Across Africa</div>
+  </div>
+  <div class="stat reveal" style="transition-delay:0.3s">
+    <div class="stat-num">6</div>
+    <div class="stat-label">African Countries</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about section" id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p class="section-tag">Our Heritage</p>
+      <h2>A Legacy of<br><em>Purposeful</em><br>Enterprise</h2>
+      <p>Founded in the heart of Tanzania, MACA has grown from a single trading venture into one of East Africa's most respected diversified holding companies. For nearly six decades, we have been building businesses that matter — creating jobs, developing infrastructure, and shaping industries.</p>
+      <p>Our approach is defined by long-term thinking, deep local knowledge, and an unwavering commitment to the people and communities we serve. We don't just invest in businesses — we invest in Tanzania's future.</p>
+      <a href="#sectors" class="btn-primary" style="display:inline-block; margin-top:20px;">Our Portfolio →</a>
+    </div>
+    <div class="about-visual reveal" style="transition-delay:0.2s">
+      <div class="about-box about-box-main">MACA</div>
+      <div class="about-box about-box-accent">
+        <span class="n">1965</span>
+        <span class="l">Founded</span>
+      </div>
+      <div class="about-box-strip"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTORS -->
+<section class="sectors section" id="sectors">
+  <div class="sectors-header reveal">
+    <div>
+      <p class="section-tag">What We Do</p>
+      <h2>Sectors of<br><em>Strategic</em> Focus</h2>
+    </div>
+    <a href="#" class="btn-ghost" style="color:var(--gold); opacity:1;">View All Businesses</a>
+  </div>
+  <div class="sectors-grid">
+    <div class="sector-card reveal">
+      <div>
+        <div class="sector-icon">🏭</div>
+        <div class="sector-name">Manufacturing</div>
+        <div class="sector-desc">End-to-end industrial production capabilities powering Tanzania's consumer and B2B markets with quality-assured goods.</div>
+      </div>
+      <div class="sector-arrow">→</div>
+    </div>
+    <div class="sector-card reveal" style="transition-delay:0.1s">
+      <div>
+        <div class="sector-icon">🌾</div>
+        <div class="sector-name">Agriculture</div>
+        <div class="sector-desc">Sustainable farming and agro-processing operations that strengthen food security and rural livelihoods across East Africa.</div>
+      </div>
+      <div class="sector-arrow">→</div>
+    </div>
+    <div class="sector-card reveal" style="transition-delay:0.2s">
+      <div>
+        <div class="sector-icon">🏗️</div>
+        <div class="sector-name">Real Estate</div>
+        <div class="sector-desc">Premium commercial and residential developments that reshape Tanzania's urban landscape with modern, sustainable design.</div>
+      </div>
+      <div class="sector-arrow">→</div>
+    </div>
+    <div class="sector-card reveal" style="transition-delay:0.0s">
+      <div>
+        <div class="sector-icon">⚡</div>
+        <div class="sector-name">Energy</div>
+        <div class="sector-desc">Investments in renewable energy and petroleum distribution networks to power Tanzania's growing economy.</div>
+      </div>
+      <div class="sector-arrow">→</div>
+    </div>
+    <div class="sector-card reveal" style="transition-delay:0.1s">
+      <div>
+        <div class="sector-icon">🚢</div>
+        <div class="sector-name">Logistics</div>
+        <div class="sector-desc">Port operations, shipping agency, and inland freight solutions connecting Tanzania to regional and global trade corridors.</div>
+      </div>
+      <div class="sector-arrow">→</div>
+    </div>
+    <div class="sector-card reveal" style="transition-delay:0.2s">
+      <div>
+        <div class="sector-icon">🏦</div>
+        <div class="sector-name">Financial Services</div>
+        <div class="sector-desc">Banking, insurance, and investment advisory services supporting businesses and individuals across the region.</div>
+      </div>
+      <div class="sector-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <div class="philosophy-left reveal">
+    <p class="section-tag">Our Philosophy</p>
+    <h2 style="color:var(--black); font-size:clamp(28px, 3vw, 40px); font-weight:300;">The Foundation of Everything We Build</h2>
+  </div>
+  <div class="reveal" style="transition-delay:0.2s">
+    <p class="philosophy-quote">"We do not measure success solely in financial returns. We measure it in the communities transformed, the livelihoods improved, and the next generation we empower across this great continent."</p>
+    <p class="philosophy-attr">MACA Group — Core Principles</p>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values section" id="values">
+  <div class="reveal">
+    <p class="section-tag">Our Principles</p>
+    <h2>Values That<br><em>Guide</em> Us</h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-item reveal">
+      <div class="value-num">01</div>
+      <div class="value-title">Integrity</div>
+      <div class="value-desc">We operate with transparency and accountability in every decision, relationship, and transaction — building trust that spans generations.</div>
+    </div>
+    <div class="value-item reveal" style="transition-delay:0.1s">
+      <div class="value-num">02</div>
+      <div class="value-title">Innovation</div>
+      <div class="value-desc">We constantly challenge convention, embrace technology, and pioneer approaches that create competitive advantages in evolving markets.</div>
+    </div>
+    <div class="value-item reveal" style="transition-delay:0.2s">
+      <div class="value-num">03</div>
+      <div class="value-title">Impact</div>
+      <div class="value-desc">Every investment we make must create measurable value — not just for shareholders, but for communities, employees, and the environment.</div>
+    </div>
+    <div class="value-item reveal" style="transition-delay:0.3s">
+      <div class="value-num">04</div>
+      <div class="value-title">Excellence</div>
+      <div class="value-desc">We hold ourselves to the highest operational standards, continuously improving processes, products, and the talent we nurture within our teams.</div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERSHIP -->
+<section class="leadership section" id="leadership">
+  <div class="reveal">
+    <p class="section-tag">Leadership</p>
+    <h2>The Team<br>Driving <em>Vision</em></h2>
+  </div>
+  <div class="leadership-grid">
+    <div class="leader-card reveal">
+      <div class="leader-photo">
+        <div class="leader-initials">AM</div>
+        <div class="leader-accent"></div>
+      </div>
+      <div class="leader-name">Amiri Manek</div>
+      <div class="leader-title">Chairman & Group CEO</div>
+    </div>
+    <div class="leader-card reveal" style="transition-delay:0.15s">
+      <div class="leader-photo">
+        <div class="leader-initials">SK</div>
+        <div class="leader-accent"></div>
+      </div>
+      <div class="leader-name">Sophia Kimaro</div>
+      <div class="leader-title">Chief Financial Officer</div>
+    </div>
+    <div class="leader-card reveal" style="transition-delay:0.3s">
+      <div class="leader-photo">
+        <div class="leader-initials">JN</div>
+        <div class="leader-accent"></div>
+      </div>
+      <div class="leader-name">James Ndegwa</div>
+      <div class="leader-title">Chief Operating Officer</div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="news section" id="news">
+  <div class="reveal">
+    <p class="section-tag">Latest</p>
+    <h2>News &<br><em>Insights</em></h2>
+  </div>
+  <div class="news-grid">
+    <div class="news-item news-item-large reveal">
+      <div class="news-date">March 2024</div>
+      <div class="news-title">MACA Announces Major Expansion Into Renewable Energy Across East Africa</div>
+      <div class="news-excerpt">The Group's new energy division will invest in solar and wind infrastructure, targeting 500MW of clean energy capacity by 2027 across Tanzania, Kenya, and Uganda.</div>
+      <a href="#" class="news-link">Read More</a>
+    </div>
+    <div class="news-item reveal" style="transition-delay:0.1s">
+      <div class="news-date">February 2024</div>
+      <div class="news-title">New Agricultural Processing Facility Opens in Arusha</div>
+      <div class="news-excerpt">The 40,000 sqm facility will support over 2,000 smallholder farmers.</div>
+      <a href="#" class="news-link">Read More</a>
+    </div>
+    <div class="news-item reveal" style="transition-delay:0.2s">
+      <div class="news-date">January 2024</div>
+      <div class="news-title">MACA Real Estate Breaks Ground on Dar es Salaam's Tallest Commercial Tower</div>
+      <div class="news-excerpt">The 42-storey landmark will redefine the city's skyline and serve over 300 businesses.</div>
+      <a href="#" class="news-link">Read More</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="reveal">
+    <p class="section-tag" style="justify-content:center;">Get In Touch</p>
+    <h2>Partner With<br><em>MACA</em></h2>
+    <p>We are always looking for exceptional talent, strategic partners, and investment opportunities that align with our vision for Africa's future.</p>
+    <div class="cta-btns">
+      <a href="#contact" class="btn-primary">Business Enquiries</a>
+      <a href="#contact" class="btn-ghost" style="color:var(--white); opacity:0.7;">Investor Relations</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">MACA</a>
+      <p class="footer-tagline">A diversified holding company committed to building Tanzania and Africa's economic future through strategic investment and sustainable enterprise.</p>
+    </div>
+    <div>
+      <p class="footer-heading">Company</p>
+      <ul class="footer-links">
+        <li><a href="#">About MACA</a></li>
+        <li><a href="#">Leadership</a></li>
+        <li><a href="#">History</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-heading">Sectors</p>
+      <ul class="footer-links">
+        <li><a href="#">Manufacturing</a></li>
+        <li><a href="#">Agriculture</a></li>
+        <li><a href="#">Real Estate</a></li>
+        <li><a href="#">Energy</a></li>
+        <li><a href="#">Logistics</a></li>
+        <li><a href="#">Financial Services</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-heading">Contact</p>
+      <ul class="footer-links">
+        <li><a href="#">Dar es Salaam HQ</a></li>
+        <li><a href="#">Investor Relations</a></li>
+        <li><a href="#">Media Enquiries</a></li>
+        <li><a href="#"><span class="__cf_email__" data-cfemail="a3cacdc5cce3cec2c0c28dc0cc8dd7d9">[email&#160;protected]</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2024 MACA Group Ltd. All rights reserved. Dar es Salaam, Tanzania.</p>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Cookie Policy</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── CONTACT MODAL ─────────────────────────────── -->
+<div class="modal-overlay" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <div class="modal-header">
+      <p class="modal-eyebrow">Get In Touch</p>
+      <h2 class="modal-title" id="modal-title">Let's Start a<br><em>Conversation</em></h2>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Success state -->
+      <div class="form-success" id="formSuccess">
+        <div class="form-success-icon">✦</div>
+        <h3>Message Received</h3>
+        <p>Thank you for reaching out to MACA Group. A member of our team will be in touch within 2 business days.</p>
+      </div>
+
+      <!-- Form -->
+      <div id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="firstName">First Name</label>
+            <input class="form-input" id="firstName" type="text" placeholder="John" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input class="form-input" id="lastName" type="text" placeholder="Doe" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input class="form-input" id="email" type="email" placeholder="john@company.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input class="form-input" id="phone" type="tel" placeholder="+255 700 000 000">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="company">Company / Organisation</label>
+            <input class="form-input" id="company" type="text" placeholder="Your company name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="enquiry">Enquiry Type</label>
+            <select class="form-select form-input" id="enquiry">
+              <option value="" disabled selected>Select a category</option>
+              <option>Business Partnership</option>
+              <option>Investment Opportunities</option>
+              <option>Procurement / Supplier</option>
+              <option>Media & Press</option>
+              <option>Careers</option>
+              <option>General Enquiry</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label" for="sector">Sector of Interest</label>
+            <select class="form-select form-input" id="sector">
+              <option value="" disabled selected>Which MACA sector?</option>
+              <option>Manufacturing</option>
+              <option>Agriculture</option>
+              <option>Real Estate</option>
+              <option>Energy</option>
+              <option>Logistics</option>
+              <option>Financial Services</option>
+              <option>Other / Multiple</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-textarea" id="message" placeholder="Tell us about your enquiry, project, or how we can help..."></textarea>
+          </div>
+        </div>
+        <hr class="form-divider">
+        <div class="form-footer">
+          <p class="form-note">Your information is kept strictly confidential and will not be shared with third parties.</p>
+          <button class="btn-submit" id="submitBtn" type="button">
+            <span class="spinner"></span>
+            <span class="btn-text">Send Message</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── WHATSAPP CHAT POPUP ────────────────────── -->
+<div class="wa-chat-popup" id="waChatPopup">
+  <div class="wa-chat-header">
+    <div class="wa-avatar">M</div>
+    <div class="wa-header-info">
+      <div class="wa-header-name">MACA Group Support</div>
+      <div class="wa-header-status"><span class="wa-status-dot"></span> Typically replies instantly</div>
+    </div>
+    <button class="wa-close-popup" id="waClosePopup" aria-label="Close chat">✕</button>
+  </div>
+  <div class="wa-chat-body">
+    <div class="wa-bubble-msg">
+      👋 Hi there! Welcome to <strong>MACA Group</strong>.<br><br>
+      How can we help you today? You can ask us about our sectors, partnerships, careers, or any other enquiry.
+      <div class="wa-msg-time">MACA Support · now</div>
+    </div>
+    <div class="wa-input-row">
+      <input class="wa-input" id="waMessageInput" type="text" placeholder="Type your message…">
+      <button class="wa-send" id="waSendBtn" aria-label="Send on WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="wa-disclaimer">Powered by WhatsApp · End-to-end encrypted</div>
+</div>
+
+<!-- ─── WHATSAPP FLOATING BUTTON ──────────────── -->
+<div class="wa-bubble">
+  <div class="wa-tooltip">Chat with us on WhatsApp</div>
+  <button class="wa-btn" id="waToggleBtn" aria-label="Open WhatsApp chat">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <div class="wa-ping"></div>
+  </button>
+</div>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Nav scroll opacity
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      nav.style.background = 'rgba(10,10,10,0.97)';
+    } else {
+      nav.style.background = 'linear-gradient(to bottom, rgba(10,10,10,0.95), transparent)';
+    }
+  });
+
+  /* ── CONTACT MODAL ─────────────────── */
+  const modal = document.getElementById('contactModal');
+  const modalClose = document.getElementById('modalClose');
+
+  function openModal() {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Open modal from all CTA links/buttons
+  document.querySelectorAll('a[href="#contact"], .nav-cta').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); openModal(); });
+  });
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Form submission
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.addEventListener('click', () => {
+    const required = ['firstName', 'lastName', 'email'];
+    let valid = true;
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.style.borderColor = '#c94c4c';
+        valid = false;
+        el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+      }
+    });
+    if (!valid) return;
+
+    submitBtn.classList.add('loading');
+    submitBtn.querySelector('.btn-text').textContent = 'Sending…';
+
+    setTimeout(() => {
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+      submitBtn.classList.remove('loading');
+    }, 1800);
+  });
+
+  /* ── WHATSAPP CHAT ──────────────────── */
+  // Replace with real WhatsApp business number (international format, no +)
+  const WA_NUMBER = '255700000000';
+  const WA_DEFAULT_MSG = 'Hello MACA Group, I would like to enquire about your services.';
+
+  const waToggle = document.getElementById('waToggleBtn');
+  const waChatPopup = document.getElementById('waChatPopup');
+  const waClose = document.getElementById('waClosePopup');
+  const waInput = document.getElementById('waMessageInput');
+  const waSend = document.getElementById('waSendBtn');
+
+  let chatOpen = false;
+
+  // Auto-open popup once after 5s
+  setTimeout(() => {
+    if (!chatOpen) {
+      waChatPopup.classList.add('open');
+      chatOpen = true;
+    }
+  }, 5000);
+
+  waToggle.addEventListener('click', () => {
+    chatOpen = !chatOpen;
+    waChatPopup.classList.toggle('open', chatOpen);
+    if (chatOpen) waInput.focus();
+  });
+
+  waClose.addEventListener('click', () => {
+    chatOpen = false;
+    waChatPopup.classList.remove('open');
+  });
+
+  function openWhatsApp() {
+    const text = waInput.value.trim() || WA_DEFAULT_MSG;
+    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  }
+
+  waSend.addEventListener('click', openWhatsApp);
+  waInput.addEventListener('keydown', e => { if (e.key === 'Enter') openWhatsApp(); });
+</script>
+</body>
+</html>
