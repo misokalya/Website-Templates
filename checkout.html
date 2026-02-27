@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Mobile Money Payment</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  * { font-family: 'Space Mono', monospace; }
+  .display { font-family: 'Bebas Neue', cursive; }
+  body { background: #fff; min-height: 100vh; }
+
+  .ticker-tape { overflow: hidden; white-space: nowrap; border-top: 1px solid #000; border-bottom: 1px solid #000; }
+  .ticker-inner { display: inline-block; animation: ticker 18s linear infinite; font-size: 10px; letter-spacing: 0.15em; padding: 6px 0; }
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  #phone { background: transparent; outline: none; width: 100%; font-family: 'Space Mono', monospace; font-size: 1.5rem; letter-spacing: 0.1em; caret-color: #000; }
+  #phone::placeholder { color: #bbb; }
+
+  .carrier-logo { transition: all 0.2s ease; filter: grayscale(100%) opacity(25%); border: 1px solid #e5e5e5; }
+  .carrier-logo.active { filter: grayscale(0%) opacity(100%); border: 2px solid #000; box-shadow: 4px 4px 0 #000; }
+
+  .btn-pay { transition: all 0.15s ease; }
+  .btn-pay:not(:disabled):hover { box-shadow: 6px 6px 0 #000; transform: translate(-2px, -2px); }
+  .btn-pay:not(:disabled):active { box-shadow: 2px 2px 0 #000; transform: translate(2px, 2px); }
+
+  .input-box { border: 2px solid #000; transition: box-shadow 0.15s ease; }
+  .input-box:focus-within { box-shadow: 5px 5px 0 #000; }
+
+  .status-dot { width: 8px; height: 8px; background: #000; animation: blink 1s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .slide-up { animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .shake { animation: shake 0.4s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  /* overlays */
+  .spin-ring {
+    width: 56px; height: 56px;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-top-color: #fff;
+    animation: spin 0.85s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .progress-bar { height: 1px; background: #fff; width: 0%; transition: width 0.5s ease; }
+
+  .step-dot { width: 7px; height: 7px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease; flex-shrink: 0; }
+  .step-dot.done   { background: #fff; border-color: #fff; }
+  .step-dot.active { background: transparent; border-color: #fff; animation: pdot 0.8s ease infinite; }
+  @keyframes pdot {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.35); }
+    50%     { box-shadow: 0 0 0 4px rgba(255,255,255,0); }
+  }
+
+  .icon-circle { width: 68px; height: 68px; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .icon-draw  { stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw 0.55s ease forwards 0.2s; }
+  .icon-draw2 { stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw 0.55s ease forwards 0.45s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  .result-in { animation: rIn 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
+  @keyframes rIn { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+  .btn-ghost { transition: background 0.15s, color 0.15s; }
+  .btn-ghost:hover { background: #fff; color: #000; }
+</style>
+</head>
+<body class="bg-white text-black flex flex-col items-center min-h-screen">
+
+  <!-- main card -->
+  <div class="w-full max-w-sm mx-auto px-4 pt-10 pb-8 flex flex-col">
+
+    <!-- logo -->
+    <div class="flex flex-col items-center mb-10">
+      <div class="display text-6xl tracking-widest leading-none select-none">Checkout</div>
+      <div class="text-[10px] tracking-[0.4em] uppercase text-gray-600 mt-1">Mobile Money Payment</div>
+    </div>
+
+    <!-- amount -->
+    <div class="border-2 border-black p-4 mb-6 slide-up" style="animation-delay:0.05s">
+      <div class="text-[10px] tracking-[0.3em] uppercase text-gray-600 mb-1">Amount Due</div>
+      <div class="display text-5xl tracking-wider">TZS 45,000</div>
+      <div class="text-[10px] tracking-[0.25em] text-gray-600 mt-1">= USD 17.42 approx</div>
+    </div>
+
+    <!-- carriers -->
+    <div class="mb-4 slide-up" style="animation-delay:0.1s">
+      <div class="text-[10px] tracking-[0.3em] uppercase text-gray-800 mb-3">Detected Network</div>
+      <div class="flex gap-3">
+        <div id="carrier-vodacom" class="carrier-logo flex-1 p-3 flex flex-col items-center gap-1 cursor-default">
+          <svg viewBox="0 0 40 24" class="w-10 h-6"><rect width="40" height="24" fill="#E60000"/><text x="4" y="17" font-family="Arial" font-weight="bold" font-size="10" fill="white">Voda</text></svg>
+          <span class="text-[8px] tracking-widest uppercase">Vodacom</span>
+        </div>
+        <div id="carrier-airtel" class="carrier-logo flex-1 p-3 flex flex-col items-center gap-1 cursor-default">
+          <svg viewBox="0 0 40 24" class="w-10 h-6"><rect width="40" height="24" fill="#ED1C24"/><text x="2" y="17" font-family="Arial" font-weight="bold" font-size="10" fill="white">Airtel</text></svg>
+          <span class="text-[8px] tracking-widest uppercase">Airtel</span>
+        </div>
+        <div id="carrier-tigo" class="carrier-logo flex-1 p-3 flex flex-col items-center gap-1 cursor-default">
+          <svg viewBox="0 0 40 24" class="w-10 h-6"><rect width="40" height="24" fill="#00539F"/><text x="8" y="17" font-family="Arial" font-weight="bold" font-size="10" fill="white">Tigo</text></svg>
+          <span class="text-[8px] tracking-widest uppercase">Tigo</span>
+        </div>
+        <div id="carrier-halotel" class="carrier-logo flex-1 p-3 flex flex-col items-center gap-1 cursor-default">
+          <svg viewBox="0 0 40 24" class="w-10 h-6"><rect width="40" height="24" fill="#F90"/><text x="2" y="17" font-family="Arial" font-weight="bold" font-size="9" fill="white">Halo</text></svg>
+          <span class="text-[8px] tracking-widest uppercase">Halotel</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- phone -->
+    <div class="slide-up" style="animation-delay:0.15s">
+      <div class="text-[10px] tracking-[0.3em] uppercase text-gray-800 mb-2">Mobile Number</div>
+      <div id="input-wrapper" class="input-box p-4 flex items-center gap-3">
+        <span class="text-gray-300 text-lg font-bold select-none">+255</span>
+        <div class="w-px h-6 bg-gray-200"></div>
+        <input id="phone" type="tel" inputmode="numeric" maxlength="12" placeholder="0754 000 000" autocomplete="off"/>
+      </div>
+      <div id="phone-status" class="text-[10px] tracking-widest uppercase mt-2 h-4 transition-all"></div>
+    </div>
+
+    <div class="border-t border-black my-6 slide-up" style="animation-delay:0.2s"></div>
+
+    <button id="pay-btn"
+      class="btn-pay w-full border-2 border-black bg-black text-white py-5 text-sm tracking-[0.4em] uppercase font-bold slide-up disabled:opacity-30 disabled:cursor-not-allowed"
+      style="animation-delay:0.25s" disabled>
+      Confirm &amp; Pay
+    </button>
+
+    <div class="text-[9px] tracking-[0.2em] uppercase text-gray-600 text-center mt-6 slide-up" style="animation-delay:0.3s">
+      Secured · No fees · Instant
+    </div>
+  </div>
+
+  <!-- PROCESSING -->
+  <div id="overlay-processing" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-50 hidden">
+    <div class="w-full max-w-xs px-6 flex flex-col items-center">
+      <div class="spin-ring mb-10"></div>
+      <div class="display text-4xl text-white tracking-widest mb-1">PROCESSING</div>
+      <div id="proc-sublabel" class="text-gray-500 text-[10px] tracking-[0.35em] uppercase mb-10">Connecting to network</div>
+      <div class="w-full bg-gray-800 mb-5" style="height:1px">
+        <div class="progress-bar" id="prog-bar"></div>
+      </div>
+      <div class="flex gap-4 mb-1">
+        <div class="step-dot" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+        <div class="step-dot" id="dot-4"></div>
+      </div>
+      <div class="flex gap-2 mt-2">
+        <span class="text-[8px] tracking-widest text-gray-700 w-10 text-center">INIT</span>
+        <span class="text-[8px] tracking-widest text-gray-700 w-10 text-center">AUTH</span>
+        <span class="text-[8px] tracking-widest text-gray-700 w-10 text-center">PUSH</span>
+        <span class="text-[8px] tracking-widest text-gray-700 w-10 text-center">CONF</span>
+      </div>
+      <div id="proc-phone" class="text-gray-700 text-[10px] tracking-widest mt-10"></div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="overlay-success" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-50 hidden">
+    <div class="result-in flex flex-col items-center w-full max-w-xs px-6">
+      <div class="icon-circle mb-8">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+          <polyline class="icon-draw" points="5,17 13,25 29,9" stroke="white" stroke-width="2" stroke-linecap="square" fill="none"/>
+        </svg>
+      </div>
+      <div class="display text-6xl text-white tracking-widest mb-1">DONE</div>
+      <div class="text-white text-[11px] tracking-[0.4em] uppercase">Payment Confirmed</div>
+      <div id="success-num" class="text-gray-600 text-[10px] tracking-widest mt-1 mb-8"></div>
+      <div class="w-full border border-gray-800 p-4 mb-8">
+        <div class="flex justify-between mb-3">
+          <span class="text-gray-600 text-[9px] tracking-widest uppercase">Amount</span>
+          <span class="text-white text-[9px] tracking-widest">TZS 45,000</span>
+        </div>
+        <div class="flex justify-between mb-3">
+          <span class="text-gray-600 text-[9px] tracking-widest uppercase">Network</span>
+          <span id="success-carrier" class="text-white text-[9px] tracking-widest uppercase"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-[9px] tracking-widest uppercase">Ref</span>
+          <span id="success-ref" class="text-white text-[9px] tracking-widest font-mono"></span>
+        </div>
+      </div>
+      <button onclick="resetFlow()" class="btn-ghost w-full border border-white text-white text-[10px] tracking-[0.3em] uppercase py-4">
+        New Payment
+      </button>
+    </div>
+  </div>
+
+  <!-- FAILED -->
+  <div id="overlay-failed" class="fixed inset-0 bg-black flex flex-col items-center justify-center z-50 hidden">
+    <div class="result-in flex flex-col items-center w-full max-w-xs px-6">
+      <div class="icon-circle mb-8">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+          <line class="icon-draw"  x1="7" y1="7" x2="27" y2="27" stroke="white" stroke-width="2" stroke-linecap="square"/>
+          <line class="icon-draw2" x1="27" y1="7" x2="7" y2="27" stroke="white" stroke-width="2" stroke-linecap="square"/>
+        </svg>
+      </div>
+      <div class="display text-6xl text-white tracking-widest mb-1">FAILED</div>
+      <div class="text-white text-[11px] tracking-[0.4em] uppercase">Payment Declined</div>
+      <div id="fail-reason" class="text-gray-500 text-[10px] tracking-[0.2em] uppercase mt-1 mb-8 text-center leading-relaxed"></div>
+      <div class="w-full border border-gray-800 p-4 mb-8">
+        <div class="flex justify-between mb-3">
+          <span class="text-gray-600 text-[9px] tracking-widest uppercase">Error</span>
+          <span id="fail-code" class="text-white text-[9px] tracking-widest font-mono"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600 text-[9px] tracking-widest uppercase">Number</span>
+          <span id="fail-num" class="text-white text-[9px] tracking-widest"></span>
+        </div>
+      </div>
+      <button onclick="retryFlow()" class="btn-ghost w-full border border-white text-white text-[10px] tracking-[0.3em] uppercase py-4 mb-3">
+        Try Again
+      </button>
+      <button onclick="resetFlow()" class="w-full text-gray-700 text-[9px] tracking-[0.3em] uppercase py-2 hover:text-white transition-colors">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+<script>
+  const CARRIERS = {
+    '0741':'vodacom','0742':'vodacom','0743':'vodacom','0744':'vodacom','0745':'vodacom',
+    '0746':'vodacom','0754':'vodacom','0755':'vodacom','0756':'vodacom','0757':'vodacom','0758':'vodacom',
+    '0780':'airtel','0781':'airtel','0782':'airtel','0783':'airtel','0784':'airtel','0786':'airtel','0787':'airtel',
+    '0710':'tigo','0711':'tigo','0712':'tigo','0713':'tigo','0714':'tigo','0715':'tigo',
+    '0716':'tigo','0717':'tigo','0718':'tigo','0719':'tigo','0765':'tigo','0766':'tigo','0767':'tigo',
+    '0620':'halotel','0621':'halotel','0622':'halotel','0623':'halotel','0624':'halotel','0625':'halotel',
+  };
+
+  const FAIL_SCENARIOS = [
+    { code: 'ERR_TIMEOUT',  reason: 'Network timeout — no response from carrier' },
+    { code: 'ERR_DECLINED', reason: 'Insufficient funds on mobile wallet' },
+    { code: 'ERR_INVALID',  reason: 'Subscriber not registered for mobile money' },
+    { code: 'ERR_BUSY',     reason: 'Carrier service temporarily unavailable' },
+  ];
+
+  const STEPS = [
+    { prog: 20,  label: 'Connecting to network'       },
+    { prog: 45,  label: 'Authenticating subscriber'   },
+    { prog: 72,  label: 'Pushing USSD prompt'         },
+    { prog: 92,  label: 'Awaiting confirmation'       },
+  ];
+
+  const phoneInput   = document.getElementById('phone');
+  const phoneStatus  = document.getElementById('phone-status');
+  const payBtn       = document.getElementById('pay-btn');
+  const inputWrapper = document.getElementById('input-wrapper');
+  const allCarriers  = document.querySelectorAll('[id^="carrier-"]');
+
+  let currentCarrier = null;
+  let currentPhone   = '';
+
+  function formatPhone(raw) {
+    const d = raw.replace(/\D/g,'').slice(0,10);
+    if (d.length <= 4) return d;
+    if (d.length <= 7) return d.slice(0,4)+' '+d.slice(4);
+    return d.slice(0,4)+' '+d.slice(4,7)+' '+d.slice(7);
+  }
+
+  function detectCarrier(digits) {
+    return digits.length >= 4 ? (CARRIERS[digits.slice(0,4)] || null) : null;
+  }
+
+  function highlightCarrier(id) {
+    allCarriers.forEach(el => el.classList.remove('active'));
+    if (id) { const t = document.getElementById('carrier-'+id); if(t) t.classList.add('active'); }
+  }
+
+  function setStatus(msg, type) {
+    phoneStatus.textContent = msg;
+    phoneStatus.className = 'text-[10px] tracking-widest uppercase mt-2 h-4 transition-all';
+    if (type === 'ok')  phoneStatus.classList.add('text-black');
+    if (type === 'err') phoneStatus.classList.add('text-gray-400');
+  }
+
+  function showOverlay(id) {
+    ['overlay-processing','overlay-success','overlay-failed'].forEach(o => {
+      document.getElementById(o).classList.add('hidden');
+    });
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  function hideAllOverlays() {
+    ['overlay-processing','overlay-success','overlay-failed'].forEach(o =>
+      document.getElementById(o).classList.add('hidden')
+    );
+  }
+
+  function genRef() {
+    return 'TXN' + Math.random().toString(36).slice(2,8).toUpperCase();
+  }
+
+  function runProcessing(onDone, succeed) {
+    let step = 0;
+    const dots   = [1,2,3,4].map(i => document.getElementById('dot-'+i));
+    const bar    = document.getElementById('prog-bar');
+    const sublbl = document.getElementById('proc-sublabel');
+    dots.forEach(d => d.className = 'step-dot');
+    bar.style.width = '0%';
+
+    function advance() {
+      if (step >= STEPS.length) {
+        bar.style.width = '100%';
+        setTimeout(() => onDone(succeed), 600);
+        return;
+      }
+      if (step > 0) dots[step-1].className = 'step-dot done';
+      dots[step].className = 'step-dot active';
+      bar.style.width = STEPS[step].prog + '%';
+      sublbl.textContent = STEPS[step].label;
+      step++;
+      setTimeout(advance, 650 + Math.random() * 550);
+    }
+    advance();
+  }
+
+  function showSuccess() {
+    document.getElementById('success-num').textContent     = '+255 · ' + currentPhone;
+    document.getElementById('success-carrier').textContent = currentCarrier || '—';
+    document.getElementById('success-ref').textContent     = genRef();
+    showOverlay('overlay-success');
+  }
+
+  function showFailed() {
+    const s = FAIL_SCENARIOS[Math.floor(Math.random() * FAIL_SCENARIOS.length)];
+    document.getElementById('fail-reason').textContent = s.reason;
+    document.getElementById('fail-code').textContent   = s.code;
+    document.getElementById('fail-num').textContent    = '+255 · ' + currentPhone;
+    showOverlay('overlay-failed');
+  }
+
+  function startPayment() {
+    document.getElementById('proc-phone').textContent = '+255 · ' + currentPhone;
+    showOverlay('overlay-processing');
+    const succeed = Math.random() > 0.35;
+    runProcessing((ok) => ok ? showSuccess() : showFailed(), succeed);
+  }
+
+  payBtn.addEventListener('click', () => {
+    currentPhone   = phoneInput.value;
+    currentCarrier = detectCarrier(currentPhone.replace(/\D/g,''));
+    startPayment();
+  });
+
+  function resetFlow() {
+    hideAllOverlays();
+    phoneInput.value = '';
+    setStatus('','');
+    highlightCarrier(null);
+    payBtn.disabled = true;
+    currentPhone = ''; currentCarrier = null;
+  }
+
+  function retryFlow() {
+    hideAllOverlays();
+    if (currentPhone) startPayment();
+  }
+
+  phoneInput.addEventListener('input', (e) => {
+    const digits = e.target.value.replace(/\D/g,'').slice(0,10);
+    e.target.value = formatPhone(digits);
+    const carrier = detectCarrier(digits);
+    highlightCarrier(carrier);
+
+    if (!digits.length) {
+      setStatus('',''); payBtn.disabled = true;
+    } else if (digits.length < 10) {
+      const r = 10-digits.length;
+      setStatus(`${r} digit${r>1?'s':''} remaining`,'');
+      payBtn.disabled = true;
+    } else if (!digits.startsWith('0')) {
+      setStatus('invalid number','err');
+      inputWrapper.classList.add('shake');
+      setTimeout(()=>inputWrapper.classList.remove('shake'),400);
+      payBtn.disabled = true;
+    } else if (!carrier) {
+      setStatus('unknown network — check number','err');
+      payBtn.disabled = true;
+    } else {
+      setStatus('checkmark ' + carrier.toUpperCase()+' detected','ok');
+      phoneStatus.textContent = '✓ ' + carrier.toUpperCase() + ' detected';
+      payBtn.disabled = false;
+    }
+  });
+</script>
+<div class="w-full border-t border-gray-800 py-4 text-center">
+  <span class="text-[9px] tracking-[0.25em] uppercase text-gray-800">
+    &copy; 2026 &nbsp;·&nbsp;
+    <a href="https://github.com/misokalya" target="_blank" rel="noopener"
+       class="hover:text-black transition-colors">
+      by Miso
+    </a>
+  </span>
+</div>
+</body>
+</html>
